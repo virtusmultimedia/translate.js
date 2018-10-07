@@ -40,8 +40,40 @@
         
       return settings.lang;
     };
+	  
+    //modified to have the translation specialized by the market (if the market is present)
+    //return the translation if OK
+    //return the passed index (without the market in front or not) if invalid 
+    this.get = function(index, market) {
+      if (!index) return index; 
+      if (market) market = market + ""; 
+      
+      var res = index;
+      try {
+        res = t[index][settings.lang];
+      }
+      catch (err) {
+        //not found, return index but check if the market was passed in the function 
+        if (market) {
+          //strip the market from the front of index and return the last part of index 
+          if (market.toString() == index.substring(0,market.length)) {index = index.substring(market.length)} 
+        }
+        return index;
+      }
+      
+      if (res)
+        return res;
+      else 
+      {
+        if (market) {
+          //strip the market from the front of index and return the last part of index 
+          if (market.toString() == index.substring(0,market.length)) {index = index.substring(market.length)} 
+        }
+        return index;
+      }
+    };
 
-
+/*  
     this.get = function(index) {
       var res = index;
 
@@ -58,7 +90,8 @@
       else
         return index;
     };
-
+*/
+	  
     this.g = this.get;
 
 
